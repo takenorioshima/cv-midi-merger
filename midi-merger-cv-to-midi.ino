@@ -24,15 +24,15 @@ unsigned long prevMillisMidiA = 0;
 unsigned long prevMillisMidiB = 0;
 
 void handleNoteOn(byte channel, byte pitch, byte velocity) {
-  midiA.sendNoteOn(pitch, velocity, channel);
+  midiB.sendNoteOn(pitch, velocity, channel);
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity) {
-  midiA.sendNoteOff(pitch, velocity, channel);
+  midiB.sendNoteOff(pitch, velocity, channel);
 }
 
 void handleControlChange(byte channel, byte number, byte value) {
-  midiA.sendControlChange(number, value, channel);
+  midiB.sendControlChange(number, value, channel);
 }
 
 void setup() {  
@@ -67,7 +67,7 @@ void loop() {
   if (analogGateIn.hasChanged()) {
     gateInValue = (analogGateIn.getValue() < 512) ? 0 : 127;
     if (gateInValue != gateInPrevValue) {
-      midiA.sendControlChange(79, gateInValue, 1);
+      midiB.sendControlChange(79, gateInValue, 1);
       if (gateInValue == 127) {
         digitalWrite(5, HIGH);
         prevMillisGate = currentMillis;
@@ -80,8 +80,8 @@ void loop() {
   if (analogCvIn.hasChanged()) {
     cvInValue = map(analogCvIn.getValue(), 255, 768, 0, 127);
     if (cvInValue != cvInPrevValue) {
-      midiA.sendControlChange(47, cvInValue, 1);
       digitalWrite(6, HIGH);
+      midiB.sendControlChange(47, cvInValue, 1);
       prevMillisCv = currentMillis;
       cvInPrevValue = cvInValue;
     }

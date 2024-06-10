@@ -89,16 +89,14 @@ void loop() {
 
   // Rad MIDI.
   if (midiA.read()) {
-    midi::MidiType type = midiA.getType();
-    if (midiA.isChannelMessage(type)) {
+    if (midiA.isChannelMessage(midiA.getType())) {
       digitalWrite(7, HIGH);
       prevMillisMidiA = currentMillis;
     }
   };
 
   if (midiB.read()) {
-    midi::MidiType type = midiB.getType();
-    if (midiB.isChannelMessage(type)) {
+    if (midiB.isChannelMessage(midiB.getType())) {
       digitalWrite(8, HIGH);
       prevMillisMidiB = currentMillis;
     }

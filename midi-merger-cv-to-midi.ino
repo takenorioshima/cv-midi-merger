@@ -35,7 +35,14 @@ void handleControlChange(byte channel, byte number, byte value) {
   midiB.sendControlChange(number, value, channel);
 }
 
-void setup() {  
+void handlePitchBend(byte channel,int value){
+  Serial.println(value);
+  midiB.sendPitchBend(value, channel);
+}
+
+void setup() {
+  Serial.begin(31250);
+
   softSerial.begin(31250);
   midiA.begin(MIDI_CHANNEL_OMNI);
   midiB.begin(MIDI_CHANNEL_OMNI);
@@ -50,6 +57,8 @@ void setup() {
 
   midiA.setHandleControlChange(handleControlChange);
   midiB.setHandleControlChange(handleControlChange);
+
+  midiB.setHandlePitchBend(handlePitchBend);
 
   pinMode(5, OUTPUT);  // LED_GATE - PD5
   pinMode(6, OUTPUT);  // LED_CV - PD6

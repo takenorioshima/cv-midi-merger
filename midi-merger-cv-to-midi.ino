@@ -35,7 +35,8 @@ void handleControlChange(byte channel, byte number, byte value) {
   midiA.sendControlChange(number, value, channel);
 }
 
-void setup() {
+void setup() {  
+  softSerial.begin(31250);
   midiA.begin(MIDI_CHANNEL_OMNI);
   midiB.begin(MIDI_CHANNEL_OMNI);
 

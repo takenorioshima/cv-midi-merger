@@ -78,7 +78,7 @@ void loop() {
     if (gateInValue != gateInPrevValue) {
       midiB.sendControlChange(79, gateInValue, 1);
       if (gateInValue == 127) {
-        digitalWrite(5, HIGH);
+        PORTD |= _BV(5);  // digitalWrite(5, HIGH);
         prevMillisGate = currentMillis;
       }
       gateInPrevValue = gateInValue;
@@ -89,8 +89,8 @@ void loop() {
   if (analogCvIn.hasChanged()) {
     cvInValue = map(analogCvIn.getValue(), 255, 768, 0, 127);
     if (cvInValue != cvInPrevValue) {
-      digitalWrite(6, HIGH);
       midiB.sendControlChange(47, cvInValue, 1);
+      PORTD |= _BV(6);  // digitalWrite(6, HIGH);
       prevMillisCv = currentMillis;
       cvInPrevValue = cvInValue;
     }
@@ -99,29 +99,29 @@ void loop() {
   // Rad MIDI.
   if (midiA.read()) {
     if (midiA.isChannelMessage(midiA.getType())) {
-      digitalWrite(7, HIGH);
+      PORTD |= _BV(7);  // digitalWrite(7, HIGH);
       prevMillisMidiA = currentMillis;
     }
   };
 
   if (midiB.read()) {
     if (midiB.isChannelMessage(midiB.getType())) {
-      digitalWrite(8, HIGH);
+      PORTB |= _BV(0);  // digitalWrite(8, HIGH);
       prevMillisMidiB = currentMillis;
     }
   };
 
   // Status LEDs.
   if (currentMillis - prevMillisGate >= ledInterval) {
-    digitalWrite(5, LOW);
+    PORTD &= ~_BV(5);  // digitalWrite(5, LOW);
   }
   if (currentMillis - prevMillisCv >= ledInterval) {
-    digitalWrite(6, LOW);
+    PORTD &= ~_BV(6);  // digitalWrite(6, LOW);
   }
   if (currentMillis - prevMillisMidiA >= ledInterval) {
-    digitalWrite(7, LOW);
+    PORTD &= ~_BV(7);  // digitalWrite(7, LOW);
   }
   if (currentMillis - prevMillisMidiB >= ledInterval) {
-    digitalWrite(8, LOW);
+    PORTB &= ~_BV(0);  // digitalWrite(8, LOW);
   }
 }
